@@ -4,7 +4,6 @@ import { insertAccountSchema } from "@/db/schema";
 
 import {
   Sheet,
-  SheetTrigger,
   SheetContent,
   SheetHeader,
   SheetTitle,

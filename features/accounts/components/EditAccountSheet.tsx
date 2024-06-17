@@ -1,11 +1,11 @@
 import { z } from "zod";
 import { useMemo } from "react";
+import { Loader2 } from "lucide-react";
 
 import { insertAccountSchema } from "@/db/schema";
 
 import {
   Sheet,
-  SheetTrigger,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -14,9 +14,8 @@ import {
 
 import { AccountForm } from "./AccountForm";
 import { useGetAccount } from "../api/useGetAccount";
+import { useEditAccount } from "../api/useEditAccount";
 import { useOpenAccount } from "../hooks/useOpenAccount";
-import { useCreateAccounts } from "../api/useCreateAccount";
-import { Loader2 } from "lucide-react";
 
 const formSchema = insertAccountSchema.pick({
   name: true,
@@ -27,9 +26,9 @@ type FormValues = z.input<typeof formSchema>;
 export const EditAccountSheet = () => {
   const { isOpen, onClose, id } = useOpenAccount();
 
-  const { data, isLoading } = useGetAccount(id);
+  const { data, isLoading, isPending } = useGetAccount(id);
 
-  const mutation = useCreateAccounts();
+  const mutation = useEditAccount(id);
 
   const onSubmit = (values: FormValues) => {
     mutation.mutate(values, {
@@ -60,7 +59,7 @@ export const EditAccountSheet = () => {
           <AccountForm
             id={id}
             onSubmit={onSubmit}
-            disabled={mutation.isPending}
+            disabled={isPending}
             defaultValues={defaultValues}
           />
         )}
