@@ -26,7 +26,7 @@ export const AccountsTable = () => {
   return (
     <>
       <DataTable
-        filterKey="email"
+        filterKey="name"
         columns={columns}
         data={accounts}
         onDelete={(row) => {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Trash } from "lucide-react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -14,6 +15,8 @@ import {
   Row,
 } from "@tanstack/react-table";
 
+import { useConfirm } from "@/hooks/useConfirm";
+
 import {
   Table,
   TableBody,
@@ -24,13 +27,12 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterKey: string;
-  onDelete?: (rows: Row<TData>[]) => void;
+  onDelete: (rows: Row<TData>[]) => void;
   disabled?: boolean;
 }
 
@@ -44,6 +46,11 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [rowSelection, setRowSelection] = useState({});
+
+  const [ConfirmDialog, confirm] = useConfirm({
+    title: "Are you sure?",
+    description: "You are about to perform a bulk delete.",
+  });
 
   const table = useReactTable({
     data,
@@ -63,7 +70,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <>
+    <div>
+      <ConfirmDialog />
       <div className="flex items-center py-4">
         <Input
           placeholder={`Filter ${filterKey}...`}
@@ -79,8 +87,12 @@ export function DataTable<TData, TValue>({
             variant="outline"
             size="sm"
             className="font-normal ml-auto text-xs"
-            onClick={() => {
-              onDelete?.(table.getFilteredSelectedRowModel().rows);
+            onClick={async () => {
+              const ok = await confirm();
+              if (ok) {
+                onDelete(table.getFilteredSelectedRowModel().rows);
+                table.resetRowSelection();
+              }
             }}
           >
             <Trash className="size-4 mr-2" /> Delete (
@@ -160,6 +172,6 @@ export function DataTable<TData, TValue>({
           Next
         </Button>
       </div>
-    </>
+    </div>
   );
 }
