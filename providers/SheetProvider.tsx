@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { NewAccountSheet } from "@/features/accounts/components/NewAccountSheet";
+import { EditAccountSheet } from "@/features/accounts/components/EditAccountSheet";
 
 export const SheetProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -18,6 +19,7 @@ export const SheetProvider = () => {
   return (
     <>
       <NewAccountSheet />
+      <EditAccountSheet />
     </>
   );
 };

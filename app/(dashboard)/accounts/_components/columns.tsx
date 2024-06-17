@@ -9,6 +9,8 @@ import { client } from "@/lib/hono";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
+import { Actions } from "./Actions";
+
 type ResponseType = InferResponseType<
   typeof client.api.accounts.$get,
   200
@@ -50,5 +52,10 @@ export const columns: ColumnDef<ResponseType>[] = [
         </Button>
       );
     },
+  },
+  {
+    header: "Actions",
+    id: "actions",
+    cell: ({ row }) => <Actions id={row.original.id} />,
   },
 ];
