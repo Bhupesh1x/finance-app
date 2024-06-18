@@ -5,12 +5,12 @@ import { columns } from "./columns";
 import { DataTable } from "@/components/DataTable";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { useGetAccounts } from "@/features/accounts/api/useGetAccounts";
-import { useBulkDeleteAccounts } from "@/features/accounts/api/useBulkDeleteAccounts";
+import { useGetCategories } from "@/features/categories/api/useGetCategories";
+import { useBulkDeleteCategories } from "@/features/categories/api/useBulkDeleteCategories";
 
-export const AccountsTable = () => {
-  const { data: accounts = [], isLoading } = useGetAccounts();
-  const deleteMutation = useBulkDeleteAccounts();
+export const CategoriesTable = () => {
+  const { data: categories = [], isLoading } = useGetCategories();
+  const deleteMutation = useBulkDeleteCategories();
 
   const disabled = deleteMutation.isPending || isLoading;
 
@@ -28,7 +28,7 @@ export const AccountsTable = () => {
       <DataTable
         filterKey="name"
         columns={columns}
-        data={accounts}
+        data={categories}
         onDelete={(row) => {
           const ids = row.map((r) => r.original.id);
           deleteMutation.mutate({ ids });
