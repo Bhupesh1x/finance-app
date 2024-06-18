@@ -1,12 +1,18 @@
 import { z } from "zod";
 import { Hono } from "hono";
 import { parse, subDays } from "date-fns";
+import { createId } from "@paralleldrive/cuid2";
 import { zValidator } from "@hono/zod-validator";
 import { and, desc, eq, gte, lte } from "drizzle-orm";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 
 import { db } from "@/db/drizzle";
-import { accounts, categories, transactions } from "@/db/schema";
+import {
+  accounts,
+  categories,
+  insertTransactionSchema,
+  transactions,
+} from "@/db/schema";
 
 const app = new Hono()
   .get(
@@ -102,6 +108,33 @@ const app = new Hono()
       if (!data) {
         return c.json({ error: "Not found" }, 404);
       }
+
+      return c.json({ data });
+    }
+  )
+  .post(
+    "/",
+    clerkMiddleware(),
+    zValidator(
+      "json",
+      insertTransactionSchema.omit({
+        id: true,
+      })
+    ),
+    async (c) => {
+      const auth = getAuth(c);
+      const values = c.req.valid("json");
+      if (!auth?.userId) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      const [data] = await db
+        .insert(transactions)
+        .values({
+          id: createId(),
+          ...values,
+        })
+        .returning();
 
       return c.json({ data });
     }
