@@ -58,9 +58,9 @@ export const NewTransactionSheet = () => {
   );
   const accountOptions = useMemo(
     () =>
-      accounts?.map((category) => ({
-        label: category.name,
-        value: category.id,
+      accounts?.map((account) => ({
+        label: account.name,
+        value: account.id,
       })),
     [accounts]
   );
