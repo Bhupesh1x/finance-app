@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { Actions } from "./Actions";
+import { AccountColumn } from "./AccountColumn";
+import { CategoryColumn } from "./CategoryColumn";
 
 type ResponseType = InferResponseType<
   typeof client.api.transactions.$get,
@@ -74,9 +76,13 @@ export const columns: ColumnDef<ResponseType>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => {
-      return <span>{row.original.category}</span>;
-    },
+    cell: ({ row }) => (
+      <CategoryColumn
+        id={row.original.id}
+        category={row.original.category}
+        categoryId={row.original.categoryId}
+      />
+    ),
   },
   {
     accessorKey: "payee",
@@ -131,9 +137,12 @@ export const columns: ColumnDef<ResponseType>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => {
-      return <span>{row.original.account}</span>;
-    },
+    cell: ({ row }) => (
+      <AccountColumn
+        account={row.original.account}
+        accountId={row.original.accountId}
+      />
+    ),
   },
   {
     header: "Actions",
