@@ -26,7 +26,7 @@ export const TransactionsTable = () => {
   return (
     <>
       <DataTable
-        filterKey="name"
+        filterKey="payee"
         columns={columns}
         data={transactions}
         onDelete={(row) => {
