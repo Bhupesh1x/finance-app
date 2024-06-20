@@ -3,7 +3,7 @@
 import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { useNewTransaction } from "@/features/transactions/hooks/useNewAccount";
+import { useNewTransaction } from "@/features/transactions/hooks/useNewTransaction";
 
 export const AddNewButton = () => {
   const { onOpen } = useNewTransaction();

@@ -42,12 +42,12 @@ export const AmountInput = ({
               type="button"
               onClick={onReverseValue}
               className={`bg-slate-400 hover:bg-slate-500 absolute top-1.5 left-1.5 rounded-md p-1.5 flex items-center justify-center transition ${
-                isIncome && "!bg-rose-500 hover:!bg-rose-600"
-              } ${isExpense && "!bg-emerald-500 hover:!bg-emerald-600"}`}
+                isIncome && "!bg-emerald-500 hover:!bg-emerald-600"
+              } ${isExpense && "!bg-rose-500 hover:!bg-rose-600"}`}
             >
               {!parsedValue && <Info className="size-4 text-white" />}
-              {isIncome && <MinusCircle className="size-4 text-white" />}
-              {isExpense && <PlusCircle className="size-4 text-white" />}
+              {isIncome && <PlusCircle className="size-4 text-white" />}
+              {isExpense && <MinusCircle className="size-4 text-white" />}
             </button>
           </TooltipTrigger>
           <TooltipContent className="text-right">
