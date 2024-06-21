@@ -1,9 +1,14 @@
 "use client";
 
+import { toast } from "sonner";
 import { format, parse } from "date-fns";
 import { useMemo, useState } from "react";
 
+import { transactions } from "@/db/schema";
 import { convertAmountToMilliunits } from "@/lib/utils";
+
+import { useSelectAccount } from "@/features/transactions/hooks/useSelectAccount";
+import { useBulkCreateTransactions } from "@/features/transactions/api/useBulkCreateTransactions";
 
 import { UplaodButton } from "./_components/UplaodButton";
 import { AddNewButton } from "./_components/AddNewButton";
@@ -38,6 +43,9 @@ function TransactionsPage() {
   const [selectedColumns, setSelectedColumns] = useState<SelectedColumnState>(
     {}
   );
+  const bulkCreateMutation = useBulkCreateTransactions();
+
+  const [AccountDialog, confirm] = useSelectAccount();
 
   const headers: string[] = importResults.data[0];
   const body: string[][] = importResults.data.slice(1);
@@ -57,6 +65,25 @@ function TransactionsPage() {
     () => Object.values(selectedColumns).filter(Boolean).length,
     [selectedColumns]
   );
+
+  const onSubmit = async (values: (typeof transactions.$inferInsert)[]) => {
+    const accountId = await confirm();
+
+    if (!accountId) {
+      return toast.error("Please select an account to continue");
+    }
+
+    const data = values.map((value) => ({
+      ...value,
+      accountId: accountId as string,
+    }));
+
+    bulkCreateMutation.mutate(data, {
+      onSuccess: () => {
+        onCancel();
+      },
+    });
+  };
 
   const onContinue = () => {
     const mappedData = {
@@ -94,7 +121,7 @@ function TransactionsPage() {
       date: format(parse(data.date, dateFormat, new Date()), outputFormat),
     }));
 
-    console.log(formattedData);
+    onSubmit(formattedData);
   };
 
   return (
@@ -130,12 +157,15 @@ function TransactionsPage() {
           {vaiant === VARIANTS.LIST ? (
             <TransactionsTable />
           ) : (
-            <ImportTableContainer
-              body={body}
-              headers={headers}
-              selectedColumns={selectedColumns}
-              setSelectedColumns={setSelectedColumns}
-            />
+            <>
+              <AccountDialog />
+              <ImportTableContainer
+                body={body}
+                headers={headers}
+                selectedColumns={selectedColumns}
+                setSelectedColumns={setSelectedColumns}
+              />
+            </>
           )}
         </CardContent>
       </Card>
