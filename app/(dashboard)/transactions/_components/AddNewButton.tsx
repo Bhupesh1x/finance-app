@@ -9,7 +9,7 @@ export const AddNewButton = () => {
   const { onOpen } = useNewTransaction();
 
   return (
-    <Button size="sm" onClick={onOpen}>
+    <Button size="sm" onClick={onOpen} className="w-full lg:w-auto">
       <Plus className="size-4 mr-2" />
       Add New
     </Button>
