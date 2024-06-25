@@ -20,3 +20,11 @@ export function formatCurrency(amout: number) {
     minimumFractionDigits: 2,
   }).format(amout);
 }
+
+export function calculatePercentageChange(previous: number, current: number) {
+  if (previous === 0) {
+    return previous === current ? 0 : 100;
+  }
+
+  return ((current - previous) / previous) * 100;
+}
