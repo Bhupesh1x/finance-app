@@ -1,5 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import { type ClassValue, clsx } from "clsx";
+import { eachDayOfInterval, isSameDay } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -27,4 +28,35 @@ export function calculatePercentageChange(previous: number, current: number) {
   }
 
   return ((current - previous) / previous) * 100;
+}
+
+export function fillMissingDays(
+  activeDays: {
+    date: Date;
+    income: number;
+    expenses: number;
+  }[],
+  startDate: Date,
+  endDate: Date
+) {
+  const allDays = eachDayOfInterval({
+    start: startDate,
+    end: endDate,
+  });
+
+  const transactionByDate = allDays.map((day) => {
+    const foundDays = activeDays.find((d) => isSameDay(d.date, day));
+
+    if (foundDays) {
+      return foundDays;
+    } else {
+      return {
+        date: day,
+        income: 0,
+        expenses: 0,
+      };
+    }
+  });
+
+  return transactionByDate;
 }
