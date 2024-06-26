@@ -10,9 +10,7 @@ import { calculatePercentageChange, fillMissingDays } from "@/lib/utils";
 import { db } from "@/db/drizzle";
 import { accounts, categories, transactions } from "@/db/schema";
 
-const app = new Hono();
-
-app.get(
+const app = new Hono().get(
   "/",
   clerkMiddleware(),
   zValidator(
