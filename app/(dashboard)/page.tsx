@@ -1,15 +1,9 @@
-"use client";
+import { DataGrid } from "@/components/DataGrid";
 
-import { useNewAccount } from "@/features/accounts/hooks/useNewAccount";
-
-export default function Home() {
-  const { onOpen } = useNewAccount();
-
+export default function DashboardPage() {
   return (
-    <main>
-      <h1 onClick={onOpen} className="cursor-pointer">
-        Dashboard Page
-      </h1>
+    <main className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
+      <DataGrid />
     </main>
   );
 }
