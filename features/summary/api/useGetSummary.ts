@@ -6,7 +6,7 @@ import { client } from "@/lib/hono";
 export const useGetSummary = () => {
   const params = useSearchParams();
 
-  const from = params.get("form") || "";
+  const from = params.get("from") || "";
   const to = params.get("to") || "";
   const accountId = params.get("accountId") || "";
 

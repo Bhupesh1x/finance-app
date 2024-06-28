@@ -151,7 +151,9 @@ const app = new Hono().get(
       .groupBy(transactions.date)
       .orderBy(transactions.date);
 
-    const days = fillMissingDays(activeDays, startDate, endDate);
+    const days = activeDays.length
+      ? fillMissingDays(activeDays, startDate, endDate)
+      : [];
 
     return c.json({
       data: {
